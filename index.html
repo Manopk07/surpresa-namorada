@@ -19,7 +19,7 @@
             text-align: center;
         }
 
-        /* Botão Inicial (Necessário para o som funcionar) */
+        /* Botão Inicial */
         #start-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; display: flex; flex-direction: column;
@@ -32,11 +32,14 @@
         }
         #btn-start:hover { background: #fff; color: #000; }
 
-        /* Mensagem de Impacto Inicial */
-        #impact-msg {
+        /* Textos de Introdução */
+        #intro-sequence {
+            display: none; width: 90%; max-width: 600px;
+        }
+        .intro-text {
             display: none; font-size: 1.8rem; font-weight: 300;
-            padding: 20px; letter-spacing: 2px;
-            animation: fadeInOut 4s forwards;
+            padding: 20px; letter-spacing: 2px; line-height: 1.5;
+            animation: fadeInOut 5s forwards;
         }
 
         /* Slideshow */
@@ -72,25 +75,35 @@
         <button id="btn-start" onclick="iniciar()">ABRIR RECADO</button>
     </div>
 
-    <div id="impact-msg">Lembre-se do porque você estar aqui</div>
+    <div id="intro-sequence">
+        <p class="intro-text">Lembre-se do porquê você estar aqui...</p>
+        <p class="intro-text">Pare um segundo e olhe para a mulher incrível que você se tornou.</p>
+        <p class="intro-text">Você tem uma força que inspira a todos ao seu redor.</p>
+        <p class="intro-text">E mesmo nos dias mais difíceis...</p>
+        <p class="intro-text">Nunca ache que você está sozinha nessa caminhada.</p>
+        <p class="intro-text">Você tem a mim, à sua família e aos amigos...</p>
+        <p class="intro-text">Que te amam e torcem por você com toda a sinceridade do mundo.</p>
+    </div>
 
     <div id="gallery">
         <div class="slide"><img src="assets/1.jpg"><p class="phrase">Olhe para a mulher incrível que você se tornou.</p></div>
         <div class="slide"><img src="assets/2.jpg"><p class="phrase">Cada sorriso seu é o motivo da minha felicidade.</p></div>
-        <div class="slide"><img src="assets/3.jpg"><p class="phrase">O foco na Nutrição é o que vai transformar seu futuro.</p></div>
+        <div class="slide"><img src="assets/3.jpg"><p class="phrase">O foco na sua carreira é o que vai transformar seu futuro.</p></div>
         <div class="slide"><img src="assets/4.jpg"><p class="phrase">Sua determinação me inspira todos os dias.</p></div>
         <div class="slide"><img src="assets/5.jpg"><p class="phrase">Nossa família é o nosso porto seguro.</p></div>
         <div class="slide"><img src="assets/6.jpg"><p class="phrase">Onde houver amor, haverá sempre um caminho.</p></div>
-        <div class="slide"><img src="assets/7.jpg"><p class="phrase">A afilhada que traz luz para as nossas vidas.</p></div>
-        <div class="slide"><img src="assets/8.jpg"><p class="phrase">O carinho dos afilhados é puro e verdadeiro.</p></div>
+        <div class="slide"><img src="assets/7.jpg"><p class="phrase">A afilhada que traz luz para a sua vida.</p></div>
+        <div class="slide"><img src="assets/8.jpg"><p class="phrase">O carinho das crianças é puro e verdadeiro.</p></div>
         <div class="slide"><img src="assets/9.jpg"><p class="phrase">Ao seu lado, qualquer lugar é o paraíso.</p></div>
         <div class="slide"><img src="assets/10.jpg"><p class="phrase">Cada momento juntos é uma memória eterna.</p></div>
         <div class="slide"><img src="assets/11.jpg"><p class="phrase">Sua força move montanhas, acredite nisso.</p></div>
-        <div class="slide"><img src="assets/12.jpg"><p class="phrase">A Nutrição não é só carreira, é sua missão.</p></div>
+        <div class="slide"><img src="assets/12.jpg"><p class="phrase">A sua familia é a sua verdadeira força.</p></div>
         <div class="slide"><img src="assets/13.jpg"><p class="phrase">Pelas pessoas que amamos e que nos amam.</p></div>
         <div class="slide"><img src="assets/14.jpg"><p class="phrase">Nunca esqueça de quem esteve lá por você.</p></div>
-        <div class="slide"><img src="assets/15.jpg"><p class="phrase">Eu sou o seu maior fã, em cada etapa.</p></div>
-        <div class="slide"><img src="assets/16.jpg"><p class="phrase">Isso é por nós. Eu te amo.</p></div>
+        <div class="slide"><img src="assets/15.jpg"><p class="phrase">Quem te fez enxergar a luz em meio a escuridão.</p></div>
+        <div class="slide"><img src="assets/16.jpg"><p class="phrase">Quem te faz rir nos momentos impossíveis.</p></div>
+        <div class="slide"><img src="assets/18.jpg"><p class="phrase">Eu sou seu maior fã.</p></div>
+        <div class="slide"><img src="assets/19.jpg"><p class="phrase">Isso é por nós. Eu te amo.</p></div>
     </div>
 
     <script>
@@ -98,14 +111,31 @@
             document.getElementById('start-screen').style.display = 'none';
             document.getElementById('player').play();
             
-            const msg = document.getElementById('impact-msg');
-            msg.style.display = 'block';
+            // Inicia a sequência de textos
+            document.getElementById('intro-sequence').style.display = 'block';
+            
+            const textos = document.querySelectorAll('.intro-text');
+            let textoAtual = 0;
 
-            setTimeout(() => {
-                msg.style.display = 'none';
-                document.getElementById('gallery').style.display = 'block';
-                carrossel();
-            }, 4000);
+            function mostrarProximoTexto() {
+                if (textoAtual < textos.length) {
+                    // Esconde todos
+                    textos.forEach(t => t.style.display = 'none');
+                    // Mostra o atual
+                    textos[textoAtual].style.display = 'block';
+                    textoAtual++;
+                    // Espera 5 segundos e chama o próximo texto
+                    setTimeout(mostrarProximoTexto, 5000);
+                } else {
+                    // Quando acabarem os textos, esconde a div de introdução e inicia as fotos
+                    document.getElementById('intro-sequence').style.display = 'none';
+                    document.getElementById('gallery').style.display = 'block';
+                    carrossel();
+                }
+            }
+
+            // Dispara o primeiro texto
+            mostrarProximoTexto();
         }
 
         let slideIdx = 0;
@@ -116,7 +146,7 @@
             if (slideIdx > slides.length) { slideIdx = 1 }
             slides[slideIdx-1].style.display = "block";
             
-            // Tempo alterado para 6000 milissegundos (6 segundos)
+            // Transição das fotos a cada 6 segundos
             setTimeout(carrossel, 6000); 
         }
     </script>
